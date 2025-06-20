@@ -505,77 +505,94 @@ class Board
 	
 	// Movimentos especiais
 	
-	// Verifica se o rei pode realizar um roque
-	protected boolean canCastle(char color, boolean isKingside) {
-		// Verifica se o rei está em xeque
-		if (isCheck(color)) return false;
-		
-		int row = (color == 'W') ? 7 : 0;
-		int kingCol = 4;
-		int rookCol = isKingside ? 7 : 0;
-		
-		// Verifica se o rei e a torre estão nas posições iniciais
-		Piece king = tiles[row][kingCol];
-		Piece rook = tiles[row][rookCol];
-		
-		if (!(king instanceof King) || !(rook instanceof Rook) || 
-			king.getColor() != color || rook.getColor() != color) {
-			return false;
-		}
-		
-		// Verifica se há peças entre o rei e a torre
-		int start = isKingside ? kingCol + 1 : kingCol - 1;
-		int end = isKingside ? rookCol - 1 : rookCol + 1;
-		int step = isKingside ? 1 : -1;
-		
-		for (int col = start; col != end; col += step) {
-			if (tiles[row][col] != null) {
-				return false;
-			}
-		}
-		
-		// Verifica se o rei não passa por casas em xeque
-		int targetKingCol = isKingside ? kingCol + 2 : kingCol - 2;
-		for (int col = kingCol; col != targetKingCol; col += step) {
-			// Salva o estado atual
-			Piece originalKing = tiles[row][kingCol];
-			Piece originalTarget = tiles[row][col];
-			
-			// Move o rei temporariamente
-			tiles[row][col] = king;
-			tiles[row][kingCol] = null;
-			
-			// Verifica se está em xeque
-			boolean inCheck = isCheck(color);
-			
-			// Desfaz o movimento
-			tiles[row][kingCol] = originalKing;
-			tiles[row][col] = originalTarget;
-			
-			if (inCheck) return false;
-		}
-		
-		return true;
+	protected boolean canCastle(char color, String type)
+	{
+	    // Verifica se o rei está em xeque
+	    if (isCheck(color)) return false;
+
+	    boolean isShort;
+	    if ( type.equals("Curto") )
+	        isShort = true;
+	    else 
+	        isShort = false;
+
+	    int row = (color == 'W') ? 7 : 0;
+	    int kingCol = 4;
+	    int rookCol = isShort ? 7 : 0;
+
+	    // Verifica se o rei e a torre estão nas posições iniciais
+	    Piece king = tiles[row][kingCol];
+	    Piece rook = tiles[row][rookCol];
+
+	    if (!(king instanceof King) || !(rook instanceof Rook)) return false;
+	    if (king.getColor() != color || rook.getColor() != color) return false;
+
+	    // Verifica se o rei ou a torre já se moveram
+	    if (king.hasMoved() || rook.hasMoved()) return false;
+
+	    // Verifica se há peças entre o rei e a torre
+	    int start = Math.min(kingCol, rookCol) + 1;
+	    int end = Math.max(kingCol, rookCol);
+	    
+	    for (int col = start; col < end; col++) 
+	    {
+	        if (tiles[row][col] != null) return false;
+	    }
+
+	    // Verifica se o rei passa por casas atacadas
+	    int step = isShort ? 1 : -1;
+	    
+	    for (int i = 1; i <= 2; i++) 
+	    {
+	        int col = kingCol + i * step;
+	        
+            // Simula o movimento do rei
+            Piece originalSource = tiles[row][kingCol];
+            Piece originalTarget = tiles[row][col];
+
+            tiles[row][kingCol] = null;
+            tiles[row][col] = king;
+
+            boolean inCheck = isCheck(color);
+
+            // Desfaz o movimento
+            tiles[row][col] = originalTarget;
+            tiles[row][kingCol] = originalSource;
+
+            if (inCheck) return false;
+	    }
+
+	    return true;
 	}
+
 	
-	// isKingside -> true = roque curto // false - roque longo
-	protected void performCastle(char color, boolean isKingside) {
+	protected void performCastle(char color, String type) 
+	{
+	    boolean isShort;
+	    if ( type.equals("Curto") )
+	        isShort = true;
+	    else 
+	        isShort = false;
+		
 		int row = (color == 'W') ? 7 : 0;
 		int kingCol = 4;
-		int rookCol = isKingside ? 7 : 0;
+		int rookCol = isShort ? 7 : 0;
 		
 		Piece king = tiles[row][kingCol];
 		Piece rook = tiles[row][rookCol];
 		
 		// Move o rei
-		int targetKingCol = isKingside ? kingCol + 2 : kingCol - 2;
+		int targetKingCol = isShort ? kingCol + 2 : kingCol - 2;
 		tiles[row][targetKingCol] = king;
 		tiles[row][kingCol] = null;
 		
 		// Move a torre
-		int targetRookCol = isKingside ? targetKingCol - 1 : targetKingCol + 1;
+		int targetRookCol = isShort ? targetKingCol - 1 : targetKingCol + 1;
 		tiles[row][targetRookCol] = rook;
 		tiles[row][rookCol] = null;
+		
+		((King) king).pieceMoved();
+		((Rook) rook).pieceMoved();
 	}
 
 } 

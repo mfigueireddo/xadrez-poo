@@ -44,8 +44,8 @@ public class ModelAPI
 	
 	// Movimentos especiais
 	
-	public static boolean canCastle(char color, boolean isKingside) { return board.canCastle(color, isKingside); }
+	public static boolean canCastle(char color, String type) { return board.canCastle(color, type); }
 	
-	public static void performCastle(char color, boolean isKingside) { board.performCastle(color, isKingside); }
+	public static void performCastle(char color, String type) { board.performCastle(color, type); }
 	
 }
