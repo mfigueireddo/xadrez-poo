@@ -28,6 +28,8 @@ abstract class Piece
         return null;
     }
     
+    protected boolean hasMoved() { return false; }
+    
     protected char getColor() { return color; }
     
     protected void setColor(char color) { this.color = color; }

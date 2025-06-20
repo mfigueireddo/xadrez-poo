@@ -5,11 +5,18 @@ import java.util.List;
 
 class Rook extends Piece{
 
+	private boolean hasMoved;
+	
 	protected Rook(char color)
 	{ 
 		super(color); 
 		this.setSymbol('R');
+		this.hasMoved = true;
 	}
+	
+	protected void pieceMoved() { this.hasMoved = true; }
+	
+	protected boolean hasMoved() { return this.hasMoved; }
 	
 	@Override
 	// Frente/trás, esquerda/direita

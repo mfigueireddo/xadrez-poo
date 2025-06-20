@@ -15,13 +15,13 @@ public class ModelAPI
 	public static char getPieceColor(int row, int column) { return board.getPieceColor(row, column); }
 	
 	public static char getPieceSymbol(int row, int column) { return board.getPieceSymbol(row, column); }
-	
+		
 	public static char setGameState(String game_state) { return board.setGameState(game_state); }
 	
 	public static String getGameState() { return board.getGameState(); }
 	
 	// Peças
-	
+		
 	public static boolean isThereAPiece(int row, int column) { return board.isThereAPiece(row, column); }
 	
 	public static boolean movePiece(int row, int column, int target_row, int target_column){ return board.movePiece(row, column, target_row, target_column); }

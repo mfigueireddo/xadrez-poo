@@ -5,11 +5,19 @@ import java.util.List;
 
 class King extends Piece{
 
+	private boolean hasMoved;
+	
 	protected King(char color)
 	{ 
 		super(color);
 		this.setSymbol('K');
+		this.hasMoved = false;
 	}
+	
+	protected void pieceMoved() { hasMoved = true; }
+	
+	@Override
+	protected boolean hasMoved() { return this.hasMoved; }
 	
 	@Override
 	// Frente/trás, esquerda/direita e diagonais mas apenas a 1 casa de distância

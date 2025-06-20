@@ -69,10 +69,24 @@ class Board
 		return piece.getSymbol(); 
 	}
 	
+	protected boolean getPieceMovementStatus(int row, int column)
+	{
+		Piece piece = tiles[row][column];
+		
+		if (piece instanceof King)
+			return ( (King) piece ).hasMoved();
+		
+		else if (piece instanceof Rook)
+			return ( (Rook) piece ).hasMoved();
+		
+		else
+			return false;
+	}
+	
 	protected char setGameState(String game_state)
 	{
 	    String[] lines = game_state.split("\n");
-	    
+
 	    char round_color = lines[0].charAt(0);
 
 	    for (int row = 0; row < 8; row++) 
@@ -84,19 +98,34 @@ class Board
 	            String token = tokens[col];
 
 	            if (token.equals("."))
+	            {
 	                tiles[row][col] = null;
-
-	            else if (token.length() == 2)
+	            }
+	            else if (token.length() == 3)
 	            {
 	                char color = token.charAt(0);
 	                char symbol = token.charAt(1);
-	                tiles[row][col] = Piece.createPiece(color, symbol); 
-	            } 
+	                char movement = token.charAt(2);
+
+	                Piece piece = Piece.createPiece(color, symbol);
+	                tiles[row][col] = piece;
+
+	                // Restaurar hasMoved se aplicável
+	                if (piece instanceof King && movement == 'T')
+	                {
+	                    ((King) piece).pieceMoved();
+	                }
+	                else if (piece instanceof Rook && movement == 'T')
+	                {
+	                    ((Rook) piece).pieceMoved();
+	                }
+	            }
 	        }
 	    }
-	    
+
 	    return round_color;
 	}
+
 	
 	protected String getGameState()
 	{
@@ -118,7 +147,26 @@ class Board
 	            {
 	                char color = piece.getColor();
 	                char symbol = piece.getSymbol();
-	                sb.append(color).append(symbol);
+	            
+	                char movement;
+	                if (piece instanceof King)
+	                {
+	                    if ( ((King) piece).hasMoved() )
+	                    	movement = 'T';
+	                    else 
+	                    	movement = 'F';
+	                }
+	                else if (piece instanceof Rook)
+	                {
+	                    if ( ((Rook) piece).hasMoved() )
+	                    	movement = 'T';
+	                    else 
+	                    	movement = 'F';
+	                }
+	                else
+	                	movement = '-';
+	                
+	                sb.append(color).append(symbol).append(movement);
 	            }
 
 	            if (col < 7)
@@ -147,6 +195,12 @@ class Board
 		
 		Piece piece = tiles[row][column];
 		Piece cmp_piece = tiles[target_row][target_column];
+		
+		if (piece instanceof King)
+			( (King) piece ).pieceMoved();
+		
+		else if (piece instanceof Rook)
+			( (Rook) piece ).pieceMoved();
 			
 		tiles[target_row][target_column] = tiles[row][column];
 		tiles[row][column] = null;			
