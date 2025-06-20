@@ -169,7 +169,7 @@ class Game extends JPanel implements Observer
         {
             for (String piece : pieces) 
             {
-                String path = "/view/images/" + color + piece + ".png";
+                String path = "/images/" + color + piece + ".png";
                 try 
                 {
                     BufferedImage image = ImageIO.read(getClass().getResourceAsStream(path));
