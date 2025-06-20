@@ -309,8 +309,12 @@ class Board
 				Piece piece = tiles[row][column];
 				if(piece != null && piece.getColor() == opponent_color)
 				{
-					if (piece.canMove(row, column, king_row, king_column))
-						return true;
+	                List<int[]> moves = getPossibleMoves(row, column);
+	                for (int[] move : moves)
+	                {
+	                    if (move[0] == king_row && move[1] == king_column)
+	                        return true; // A peça pode atingir o rei
+	                }
 				}
 					
 			}
@@ -323,7 +327,7 @@ class Board
 	{
 		// Se não estiver em xeque, não pode ser xeque-mate
 		if (!isCheck(color)) return false;
-		
+
 		// Procura todas as peças da cor
 		for(int row=0; row<8; row++)
 		{
@@ -359,7 +363,6 @@ class Board
 				}
 			}
 		}
-		
 		
 		return true;
 	}

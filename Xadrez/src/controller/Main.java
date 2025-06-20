@@ -97,8 +97,11 @@ public class Main
 	                	{
 	                		ModelAPI.movePiece(origin_row, origin_column, selected_row, selected_column);
 	            			notifyObservers(Event.getEvent("PIECE_MOVEMENT"));
+	            			
 	            	    	if (ModelAPI.checkPawnPromotion(round_color))
 	            				notifyObservers(Event.getEvent("PAWN_PROMOTION"));
+	            	    	
+	            	    	afterMoveProcedures();
 	                		round_color = (round_color == 'W') ? 'B' : 'W';
 	                		afterMoveProcedures();
 	                		selected_row = -1; selected_column = -1;
