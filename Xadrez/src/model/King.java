@@ -14,9 +14,8 @@ class King extends Piece{
 		this.hasMoved = false;
 	}
 	
-	protected void pieceMoved() { hasMoved = true; }
+	protected void pieceMoved() { this.hasMoved = true; }
 	
-	@Override
 	protected boolean hasMoved() { return this.hasMoved; }
 	
 	@Override

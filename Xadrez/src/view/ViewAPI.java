@@ -38,6 +38,10 @@ public class ViewAPI
     
     public static void clearHighlightedPath() { game_panel.clearHighlightedPath(); }
     
+    public static void highlightTile(int row, int column) { game_panel.highlightTile(row, column); }
+    
+    public static void clearHighlightedTile() { game_panel.clearHighlightedTile(); } 
+    
     // Telas
     
     public static void showMenu() { window_frame.showPanel(menu_panel); }

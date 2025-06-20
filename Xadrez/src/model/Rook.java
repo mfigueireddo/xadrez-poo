@@ -11,7 +11,7 @@ class Rook extends Piece{
 	{ 
 		super(color); 
 		this.setSymbol('R');
-		this.hasMoved = true;
+		this.hasMoved = false;
 	}
 	
 	protected void pieceMoved() { this.hasMoved = true; }

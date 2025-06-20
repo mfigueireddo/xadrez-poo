@@ -30,19 +30,12 @@ import model.ModelAPI;
 import controller.Event;
 import controller.Observer;
 
-// Arquivo
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-
 class Game extends JPanel implements Observer
 {
 	private HashMap<String, BufferedImage> image_map = new HashMap<>();
 	
 	private List<int[]> highlighted_path = new ArrayList<>();
+	private int[] highlighted_tile;
 	
 	JMenuItem queen = new JMenuItem("Rainha");
 	JMenuItem rook = new JMenuItem("Torre");
@@ -138,6 +131,13 @@ class Game extends JPanel implements Observer
                     g2d.setColor(new Color(0, 100, 255, 100));
                     g2d.fillRect(x, y, 64, 64);
                 }
+                
+                // Pinta a casa do roque
+                if ( highlighted_tile != null && row == highlighted_tile[0] && column == highlighted_tile[1] )
+                {
+                    g2d.setColor(new Color(255, 100, 0, 100));
+                    g2d.fillRect(x, y, 64, 64);
+                }
         		
         		// Pinta as imagens
         		
@@ -191,9 +191,21 @@ class Game extends JPanel implements Observer
     	repaint();
     }
     
+    protected void highlightTile(int row, int column)
+    {
+    	highlighted_tile = new int[] { row, column };
+    	repaint();
+    }
+    
     protected void clearHighlightedPath()
     {
     	highlighted_path.clear();
+    	repaint();
+    }
+    
+    protected void clearHighlightedTile()
+    {
+    	highlighted_tile = null;
     	repaint();
     }
     

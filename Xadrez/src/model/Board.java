@@ -112,13 +112,11 @@ class Board
 
 	                // Restaurar hasMoved se aplicável
 	                if (piece instanceof King && movement == 'T')
-	                {
-	                    ((King) piece).pieceMoved();
-	                }
+	                	((King) piece).pieceMoved();
+	                
 	                else if (piece instanceof Rook && movement == 'T')
-	                {
 	                    ((Rook) piece).pieceMoved();
-	                }
+	                   
 	            }
 	        }
 	    }
@@ -507,7 +505,7 @@ class Board
 	
 	protected boolean canCastle(char color, String type)
 	{
-	    // Verifica se o rei está em xeque
+		// Verifica se o rei está em xeque
 	    if (isCheck(color)) return false;
 
 	    boolean isShort;
@@ -526,7 +524,7 @@ class Board
 
 	    if (!(king instanceof King) || !(rook instanceof Rook)) return false;
 	    if (king.getColor() != color || rook.getColor() != color) return false;
-
+	    
 	    // Verifica se o rei ou a torre já se moveram
 	    if (king.hasMoved() || rook.hasMoved()) return false;
 
@@ -536,7 +534,8 @@ class Board
 	    
 	    for (int col = start; col < end; col++) 
 	    {
-	        if (tiles[row][col] != null) return false;
+	        if (tiles[row][col] != null)
+	        	return false;
 	    }
 
 	    // Verifica se o rei passa por casas atacadas
@@ -559,7 +558,8 @@ class Board
             tiles[row][col] = originalTarget;
             tiles[row][kingCol] = originalSource;
 
-            if (inCheck) return false;
+            if (inCheck)
+            	return false;
 	    }
 
 	    return true;

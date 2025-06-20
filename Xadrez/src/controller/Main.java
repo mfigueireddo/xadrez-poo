@@ -27,6 +27,10 @@ public class Main
 	static int origin_row = -1;
 	static int origin_column = -1;
 	
+	static String castle_type = null;
+	static int castle_row = -1;
+	static int castle_column = -1;
+	
 	static int backup_row = -1;
 	static int backup_column = -1;
 	
@@ -85,18 +89,43 @@ public class Main
 	                		{
 		                		origin_row = selected_row;
 		                		origin_column = selected_column;
+		                		
 		                		ViewAPI.highlightPath(selected_row, selected_column);
 		                		highlighted_path = ModelAPI.getPossibleMoves(selected_row, selected_column);
+		                		
+		                		if (ModelAPI.canCastle(round_color, "Curto"))
+		                		{
+		                			castle_row = origin_row;
+		                			castle_column = origin_column + 2;
+		                			castle_type = "Curto";
+		                			ViewAPI.highlightTile(castle_row, castle_column);
+		                		}
+		                		
+		                		if (ModelAPI.canCastle(round_color, "Longo"))
+		                		{
+		                			castle_row = origin_row;
+		                			castle_column = origin_column - 2;
+		                			castle_type = "Longo";
+		                			ViewAPI.highlightTile(castle_row, castle_column);
+		                		}
+		                		
 		                		isPieceSelected = !isPieceSelected;
 	                		}
 	                	}
 	                }
 	                else 
 	                {
-	                	if ( isHighlighted(selected_row, selected_column) )
+	                	if ( isHighlighted(selected_row, selected_column) || (castle_row != -1 && castle_column != -1) )
 	                	{
-	                		ModelAPI.movePiece(origin_row, origin_column, selected_row, selected_column);
-	            			notifyObservers(Event.getEvent("PIECE_MOVEMENT"));
+	                		if (castle_row == -1 && castle_column == -1)
+	                		{
+		                		ModelAPI.movePiece(origin_row, origin_column, selected_row, selected_column);
+		            			notifyObservers(Event.getEvent("PIECE_MOVEMENT"));
+	                		}
+	                		else
+	                		{
+	                			ModelAPI.performCastle(round_color, castle_type);
+	                		}
 	            			
 	            	    	if (ModelAPI.checkPawnPromotion(round_color))
 	            				notifyObservers(Event.getEvent("PAWN_PROMOTION"));
@@ -104,15 +133,22 @@ public class Main
 	            	    	afterMoveProcedures();
 	                		round_color = (round_color == 'W') ? 'B' : 'W';
 	                		afterMoveProcedures();
+	                		
 	                		selected_row = -1; selected_column = -1;
+	                		castle_row = -1; castle_column = -1;
 	                		origin_row = -1; origin_column = -1;
+	                		castle_type = null;
+	                		
 	                		ViewAPI.clearHighlightedPath();
+	                		ViewAPI.clearHighlightedTile();
 	                	}
 	                	else
 	                	{
 	                		selected_row = -1; selected_column = -1;
+	                		castle_row = -1; castle_column = -1;
 	                		origin_row = -1; origin_column = -1;
 	                		ViewAPI.clearHighlightedPath();
+	                		ViewAPI.clearHighlightedTile();
 	                	}
 	                	isPieceSelected = !isPieceSelected;
 	                }
@@ -223,12 +259,10 @@ public class Main
                 fileToSave = new File(fileToSave.getParentFile(), fileToSave.getName() + ".txt");
             }
             
-            try (FileWriter writer = new FileWriter(fileToSave)) {
+            try (FileWriter writer = new FileWriter(fileToSave)) 
+            {
                 String gameState = ModelAPI.getGameState();
-                
                 writer.write(gameState);
-                
-                System.out.println("Jogo salvo em: " + fileToSave.getAbsolutePath());
             } 
             catch (IOException ex) 
             {
