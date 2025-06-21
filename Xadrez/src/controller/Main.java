@@ -80,18 +80,25 @@ public class Main
 	                
 	                backup_row = selected_row = y / 64;
 	                backup_column = selected_column = x / 64;
-	                	                
+	                	           
+	                // Selecionando peça a ser movida
 	                if ( !isPieceSelected )
 	                {
+	                	// Restringe à casas onde existem peças
 	                	if (ModelAPI.isThereAPiece(selected_row, selected_column))
 	                	{
+	                		// Restringe à casas com peças da cor do round atual
 	                		if ( ModelAPI.getPieceColor(selected_row, selected_column) == round_color )
 	                		{
+	                			// Guarda posição de origem da peça
 		                		origin_row = selected_row;
 		                		origin_column = selected_column;
 		                		
+		                		// Movimentos possíveis
 		                		ViewAPI.highlightPath(selected_row, selected_column);
 		                		highlighted_path = ModelAPI.getPossibleMoves(selected_row, selected_column);
+		                		
+		                		// Roque
 		                		
 		                		if (ModelAPI.canCastle(round_color, "Curto"))
 		                		{
@@ -109,24 +116,32 @@ public class Main
 		                			ViewAPI.highlightTile(castle_row, castle_column);
 		                		}
 		                		
+		                		// Peça selecionada
 		                		isPieceSelected = !isPieceSelected;
 	                		}
 	                	}
 	                }
+	                // Selecionando posição para mover a peça
 	                else 
 	                {
+	                	// Restringe à casas onde é possível mover a peça
 	                	if ( isHighlighted(selected_row, selected_column) || (castle_row != -1 && castle_column != -1) )
 	                	{
+	                		// Movimento padrão de peça
 	                		if (castle_row == -1 && castle_column == -1)
 	                		{
 		                		ModelAPI.movePiece(origin_row, origin_column, selected_row, selected_column);
 		            			notifyObservers(Event.getEvent("PIECE_MOVEMENT"));
 	                		}
+	                		
+	                		// Roque
 	                		else
 	                		{
 	                			ModelAPI.performCastle(round_color, castle_type);
+		            			notifyObservers(Event.getEvent("CASTLE"));
 	                		}
 	            			
+	                		// Promoção de peão
 	            	    	if (ModelAPI.checkPawnPromotion(round_color))
 	            				notifyObservers(Event.getEvent("PAWN_PROMOTION"));
 	            	    	
@@ -142,14 +157,20 @@ public class Main
 	                		ViewAPI.clearHighlightedPath();
 	                		ViewAPI.clearHighlightedTile();
 	                	}
+	                	
+	                	// Cancela o movimento caso o usuário clique em uma casa vazia ou de sua cor
 	                	else
 	                	{
 	                		selected_row = -1; selected_column = -1;
 	                		castle_row = -1; castle_column = -1;
 	                		origin_row = -1; origin_column = -1;
+	                		castle_type = null;
+	                		
 	                		ViewAPI.clearHighlightedPath();
 	                		ViewAPI.clearHighlightedTile();
 	                	}
+	                	
+	                	// Peça não selecionada
 	                	isPieceSelected = !isPieceSelected;
 	                }
             	}
@@ -161,11 +182,10 @@ public class Main
 	{
 	    ViewAPI.addMouseListener(new MouseAdapter() {
 	        @Override
-	        public void mousePressed(MouseEvent e) {
+	        public void mousePressed(MouseEvent e) 
+	        {
 	            if (e.getButton() == MouseEvent.BUTTON3) 
-	            {
-	                saveGame();
-	            }
+	            	saveGame();
 	        }
 	    });
 	}
@@ -186,6 +206,7 @@ public class Main
 	
 	// Auxiliares
 	
+	// Confere se uma casa está destacada
     private static boolean isHighlighted(int row, int column)
     {
         for (int[] pos : highlighted_path) {
@@ -202,17 +223,17 @@ public class Main
     	if (ModelAPI.isCheckMate(round_color))
     	{
     		notifyObservers(Event.getEvent("CHECKMATE"));
-    		return;
+    		return; // Acabou o jogo
     	}
-    	
-    	if (ModelAPI.isCheck(round_color))
-    		notifyObservers(Event.getEvent("CHECK"));
     	
     	if (ModelAPI.isStaleMate(round_color))
     	{
 			notifyObservers(Event.getEvent("STALEMATE"));
-			return;
+			return; // Acabou o jogo
     	}
+    	
+    	if (ModelAPI.isCheck(round_color))
+    		notifyObservers(Event.getEvent("CHECK"));	
     } 
     
     private static void formalizePawnPromotion(String piece)
@@ -251,24 +272,20 @@ public class Main
 
         int userSelection = fileChooser.showSaveDialog(null);
 
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
+        if (userSelection == JFileChooser.APPROVE_OPTION) 
+        {
             File fileToSave = fileChooser.getSelectedFile();
             
             // Garante que o arquivo tenha a extensão .txt
-            if (!fileToSave.getName().toLowerCase().endsWith(".txt")) {
+            if (!fileToSave.getName().toLowerCase().endsWith(".txt"))
                 fileToSave = new File(fileToSave.getParentFile(), fileToSave.getName() + ".txt");
-            }
             
             try (FileWriter writer = new FileWriter(fileToSave)) 
             {
                 String gameState = ModelAPI.getGameState();
                 writer.write(gameState);
             } 
-            catch (IOException ex) 
-            {
-                ex.printStackTrace();
-                // Informar o usuário de um erro
-            }
+            catch (IOException ex) {}
         }
     }
     
@@ -297,11 +314,9 @@ public class Main
                 }
 
                 return content.toString();
-                
             } 
             catch (IOException ex) {}
         }
-
         return null;
     }
 }

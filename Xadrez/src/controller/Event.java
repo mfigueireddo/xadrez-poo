@@ -7,7 +7,8 @@ public enum Event
 	CHECKMATE,
 	STALEMATE,
 	PAWN_PROMOTION,
-	PAWN_PROMOTED;
+	PAWN_PROMOTED,
+	CASTLE;
 	
 	public static Event getEvent(String key) { return Event.valueOf(key); }
 	

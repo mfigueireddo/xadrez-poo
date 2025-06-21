@@ -94,6 +94,8 @@ class Game extends JPanel implements Observer
 			break;	
 		case "PAWN_PROMOTED":
 			break;
+		case "CASTLE":
+			break;
 		}
 		
 	}
