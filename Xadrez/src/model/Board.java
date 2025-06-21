@@ -391,7 +391,7 @@ class Board
 					// Tenta todos os movimentos possíveis da peça
 					List<int[]> possibleMoves = getPossibleMoves(row, column);
 					for(int[] move : possibleMoves)
-					{
+					{						
 						int targetRow = move[0];
 						int targetColumn = move[1];
 						
@@ -410,7 +410,8 @@ class Board
 						tiles[targetRow][targetColumn] = originalPiece;
 						
 						// Se encontrou um movimento que tira do xeque, não é xeque-mate
-						if (!stillInCheck) return false;
+						if (!stillInCheck) 
+							return false;
 					}
 				}
 			}

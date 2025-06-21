@@ -127,18 +127,18 @@ public class Main
 	                	// Restringe à casas onde é possível mover a peça
 	                	if ( isHighlighted(selected_row, selected_column) || (castle_row != -1 && castle_column != -1) )
 	                	{
-	                		// Movimento padrão de peça
-	                		if (castle_row == -1 && castle_column == -1)
-	                		{
-		                		ModelAPI.movePiece(origin_row, origin_column, selected_row, selected_column);
-		            			notifyObservers(Event.getEvent("PIECE_MOVEMENT"));
-	                		}
-	                		
 	                		// Roque
-	                		else
+	                		if (selected_row == castle_row && selected_column == castle_column)
 	                		{
 	                			ModelAPI.performCastle(round_color, castle_type);
 		            			notifyObservers(Event.getEvent("CASTLE"));
+	                		}
+	                		
+	                		// Movimento padrão da peça
+	                		else
+	                		{
+		                		ModelAPI.movePiece(origin_row, origin_column, selected_row, selected_column);
+		            			notifyObservers(Event.getEvent("PIECE_MOVEMENT"));
 	                		}
 	            			
 	                		// Promoção de peão
