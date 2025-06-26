@@ -43,6 +43,8 @@ public class Main
 	
 		userLeftClickHandler();
 		userRightClickHandler();
+		userMiddleClickHandler();
+		
 		pawnPromotionHandler();
 		menuHandler();
 	}
@@ -188,6 +190,18 @@ public class Main
 	    });
 	}
 	
+	private static void userMiddleClickHandler()
+	{
+	    ViewAPI.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mousePressed(MouseEvent e) 
+	        {
+	            if (e.getButton() == MouseEvent.BUTTON2) 
+	            	exitGame();
+	        }
+	    });
+	}
+	
 	private static void pawnPromotionHandler()
 	{
 		ViewAPI.getMenuItem("Queen").addActionListener(e -> formalizePawnPromotion("Queen"));
@@ -305,5 +319,10 @@ public class Main
             catch (IOException ex) {}
         }
         return null;
+    }
+    
+    private static void exitGame()
+    {
+    	ViewAPI.showMenu();
     }
 }
