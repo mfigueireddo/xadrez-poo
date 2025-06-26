@@ -322,7 +322,25 @@ public class Main
     }
     
     private static void exitGame()
-    {
+    {    	
+    	round_color = 'W';
+		
+    	isPieceSelected = false;
+    	selected_row = -1;
+    	selected_column = -1;
+    	
+    	origin_row = -1;
+    	origin_column = -1;
+    	
+    	castle_type = null;
+    	castle_row = -1;
+    	castle_column = -1;
+    	
+    	backup_row = -1;
+    	backup_column = -1;
+    	
+    	highlighted_path = new ArrayList<>();
+    	
     	ViewAPI.showMenu();
     }
 }

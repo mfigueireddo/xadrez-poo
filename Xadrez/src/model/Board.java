@@ -492,6 +492,7 @@ class Board
 			break;
 		case "Rook":
 			tiles[row][column] = new Rook(color);
+			((Rook) tiles[row][column]).pieceMoved();
 			break;
 		case "Bishop":
 			tiles[row][column] = new Bishop(color);
