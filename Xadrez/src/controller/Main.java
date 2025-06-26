@@ -98,24 +98,45 @@ public class Main
 		                		ViewAPI.highlightPath(selected_row, selected_column);
 		                		highlighted_path = ModelAPI.getPossibleMoves(selected_row, selected_column);
 		                		
-		                		// Roque
-		                		
-		                		if (ModelAPI.canCastle(round_color, "Curto"))
+		                		// Roque (Rei)
+		                		if(ModelAPI.isCastleKing(selected_row, selected_column, round_color))
 		                		{
-		                			castle_row = origin_row;
-		                			castle_column = origin_column + 2;
-		                			castle_type = "Curto";
-		                			ViewAPI.highlightTile(castle_row, castle_column);
+			                		if (ModelAPI.canCastle(round_color, "Curto"))
+			                		{
+			                			castle_row = origin_row;
+			                			castle_column = origin_column + 2;
+			                			castle_type = "Curto";
+			                			ViewAPI.highlightTile(castle_row, castle_column);
+			                		}
+			                		
+			                		if (ModelAPI.canCastle(round_color, "Longo"))
+			                		{
+			                			castle_row = origin_row;
+			                			castle_column = origin_column - 2;
+			                			castle_type = "Longo";
+			                			ViewAPI.highlightTile(castle_row, castle_column);
+			                		}
 		                		}
 		                		
-		                		if (ModelAPI.canCastle(round_color, "Longo"))
+		                		// Roque (Torre)
+		                		else if (ModelAPI.isCastleRook(selected_row, selected_column, round_color))
 		                		{
-		                			castle_row = origin_row;
-		                			castle_column = origin_column - 2;
-		                			castle_type = "Longo";
-		                			ViewAPI.highlightTile(castle_row, castle_column);
+		                			if (ModelAPI.canCastle(round_color, "Curto"))
+		                			{
+		                				castle_row = origin_row;
+		                				castle_column = selected_column - 2;
+		                				castle_type = "Curto";
+		                				ViewAPI.highlightTile(castle_row, castle_column);
+		                			}
+		                			else if (ModelAPI.canCastle(round_color, "Longo"))
+		                			{
+		                				castle_row = origin_row;
+		                				castle_column = selected_column + 3;
+		                				castle_type = "Longo";
+		                				ViewAPI.highlightTile(castle_row, castle_column);
+		                			}
 		                		}
-		                		
+
 		                		// Peça selecionada
 		                		isPieceSelected = !isPieceSelected;
 	                		}
@@ -124,8 +145,8 @@ public class Main
 	                // Selecionando posição para mover a peça
 	                else 
 	                {
-	                	// Restringe à casas onde é possível mover a peça
-	                	if ( isHighlighted(selected_row, selected_column) || (castle_row != -1 && castle_column != -1) )
+	                	// Restringe à casas onde é possível mover a peça por movimento normal
+	                	if ( isHighlighted(selected_row, selected_column) || (selected_row == castle_row && selected_column == castle_column) )
 	                	{
 	                		// Roque
 	                		if (selected_row == castle_row && selected_column == castle_column)

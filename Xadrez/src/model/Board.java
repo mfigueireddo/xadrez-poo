@@ -504,6 +504,37 @@ class Board
 	
 	// Movimentos especiais
 	
+	protected boolean isCastleKing(int row, int column, char color)
+	{
+		Piece piece = tiles[row][column];
+		if (!(piece instanceof King)) return false;
+		if (piece.getColor() != color) return false;
+		if (((King) piece).hasMoved()) return false;
+
+		int expectedRow = (color == 'W') ? 7 : 0;
+		return row == expectedRow && column == 4;
+	}
+
+	protected boolean isCastleRook(int row, int column, char color)
+	{
+		Piece piece = tiles[row][column];
+		if (!(piece instanceof Rook)) return false;
+		if (piece.getColor() != color) return false;
+		if (((Rook) piece).hasMoved()) return false;
+
+		int expectedRow = (color == 'W') ? 7 : 0;
+		if (row != expectedRow) return false;
+
+		// Apenas as colunas 0 e 7 são consideradas para roque
+		if (column == 0)
+			return canCastle(color, "Longo");
+		else if (column == 7)
+			return canCastle(color, "Curto");
+
+		return false;
+	}
+
+	
 	protected boolean canCastle(char color, String type)
 	{
 		// Verifica se o rei está em xeque
@@ -519,10 +550,10 @@ class Board
 	    int kingCol = 4;
 	    int rookCol = isShort ? 7 : 0;
 
-	    // Verifica se o rei e a torre estão nas posições iniciais
 	    Piece king = tiles[row][kingCol];
 	    Piece rook = tiles[row][rookCol];
 
+	    // Verifica se o rei ou a torre estão no lugar que deviam
 	    if (!(king instanceof King) || !(rook instanceof Rook)) return false;
 	    if (king.getColor() != color || rook.getColor() != color) return false;
 	    
