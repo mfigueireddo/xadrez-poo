@@ -1,0 +1,7 @@
+Matheus Figueiredo - 2320813
+Pedro Vanini - 2310605
+Raphael Terencio - 2111533
+
+main: src/controller/Main.java
+
+OBS: o movimento normal de uma peça pinta as casas de azul, já o movimento de roque pinta a casa destino de vermelho
