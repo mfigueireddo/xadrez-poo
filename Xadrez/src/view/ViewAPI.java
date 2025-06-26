@@ -22,15 +22,13 @@ public class ViewAPI
 		game_panel = window_frame.getGamePanel();
 	}
 	
+	public static Game getObserver() { return game_panel; }
+	
     public static void addMouseListener(MouseListener listener) { game_panel.addMouseListener(listener); }
     
     public static JMenuItem getMenuItem(String item) { return game_panel.getMenuItem(item); }
     
     public static JButton getButton(String button) { return menu_panel.getButton(button); }
-    
-    // Observer
-    
-    public static void registerObserver() { Main.addObserver(game_panel); }
     
     // Callbacks
     

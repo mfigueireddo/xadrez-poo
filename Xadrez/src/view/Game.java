@@ -27,8 +27,8 @@ import java.io.IOException;
 
 // ModelAPI
 import model.ModelAPI;
+import model.Observer;
 import controller.Event;
-import controller.Observer;
 
 class Game extends JPanel implements Observer
 {
@@ -73,7 +73,7 @@ class Game extends JPanel implements Observer
 	public void update(Event event)
 	{		
 		repaint();
-		
+				
 		String event_name = Event.getEvent(event);
 		
 		switch (event_name)

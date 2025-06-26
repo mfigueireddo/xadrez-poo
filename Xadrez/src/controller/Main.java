@@ -35,13 +35,11 @@ public class Main
 	static int backup_column = -1;
 	
 	static List<int[]> highlighted_path = new ArrayList<>();
-	
-	private static List<Observer> observers = new ArrayList<>();
-	
+		
 	public static void main(String[] args)
 	{			
 		ViewAPI.openWindow();
-		ViewAPI.registerObserver();
+		ModelAPI.registerObserver();
 	
 		userLeftClickHandler();
 		userRightClickHandler();
@@ -52,20 +50,6 @@ public class Main
 	// Métodos get()
 	
 	public static char getRoundColor() { return round_color; }
-	
-	// Observer
-	
-    public static void addObserver(Observer obs) { observers.add(obs); }
-
-    public static void removeObserver(Observer obs) { observers.remove(obs); }
-
-    private static void notifyObservers(Event event) 
-    {
-        for (Observer obs : observers) 
-        {
-            obs.update(event);
-        }
-    }
 	
 	// Callbacks
 	
@@ -150,21 +134,14 @@ public class Main
 	                	{
 	                		// Roque
 	                		if (selected_row == castle_row && selected_column == castle_column)
-	                		{
 	                			ModelAPI.performCastle(round_color, castle_type);
-		            			notifyObservers(Event.getEvent("CASTLE"));
-	                		}
 	                		
 	                		// Movimento padrão da peça
 	                		else
-	                		{
-		                		ModelAPI.movePiece(origin_row, origin_column, selected_row, selected_column);
-		            			notifyObservers(Event.getEvent("PIECE_MOVEMENT"));
-	                		}
+	                			ModelAPI.movePiece(origin_row, origin_column, selected_row, selected_column);
 	            			
 	                		// Promoção de peão
-	            	    	if (ModelAPI.checkPawnPromotion(round_color))
-	            				notifyObservers(Event.getEvent("PAWN_PROMOTION"));
+	            	    	ModelAPI.checkPawnPromotion(round_color);
 	            	    	
 	            	    	afterMoveProcedures();
 	                		round_color = (round_color == 'W') ? 'B' : 'W';
@@ -242,26 +219,15 @@ public class Main
     private static void afterMoveProcedures() 
     {	
     	if (ModelAPI.isCheckMate(round_color))
-    	{
-    		notifyObservers(Event.getEvent("CHECKMATE"));
     		return; // Acabou o jogo
-    	}
     	
     	if (ModelAPI.isStaleMate(round_color))
-    	{
-			notifyObservers(Event.getEvent("STALEMATE"));
-			return; // Acabou o jogo
-    	}
+    		return; // Acabou o jogo
     	
-    	if (ModelAPI.isCheck(round_color))
-    		notifyObservers(Event.getEvent("CHECK"));	
+    	ModelAPI.isCheck(round_color);
     } 
     
-    private static void formalizePawnPromotion(String piece)
-    {
-    	ModelAPI.promotePawn(piece, backup_row, backup_column);
-    	notifyObservers(Event.getEvent("PAWN_PROMOTED"));
-    }
+    private static void formalizePawnPromotion(String piece){ ModelAPI.promotePawn(piece, backup_row, backup_column); }
     
     // Estado do jogo
     
