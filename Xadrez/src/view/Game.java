@@ -30,7 +30,7 @@ import model.ModelAPI;
 import model.Observer;
 import controller.Event;
 
-class Game extends JPanel implements Observer
+class Game extends JPanel
 {
 	private HashMap<String, BufferedImage> image_map = new HashMap<>();
 	
@@ -65,39 +65,6 @@ class Game extends JPanel implements Observer
 	{
 		setPreferredSize(new java.awt.Dimension(64 * 8, 64 * 8));
 		loadImages();
-	}
-	
-	// Observer
-	
-	@Override
-	public void update(Event event)
-	{		
-		repaint();
-				
-		String event_name = Event.getEvent(event);
-		
-		switch (event_name)
-		{
-		case "PIECE_MOVEMENT":
-			break;
-		case "CHECK":
-			checkCallback();
-			break;
-		case "CHECKMATE":
-			checkMateCallback();
-			break;
-		case "STALEMATE":
-			staleMateCallback();
-			break;
-		case "PAWN_PROMOTION":
-			pawnPromotionCallback();
-			break;	
-		case "PAWN_PROMOTED":
-			break;
-		case "CASTLE":
-			break;
-		}
-		
 	}
 
 	// Paint
@@ -211,7 +178,7 @@ class Game extends JPanel implements Observer
     	repaint();
     }
     
-    private void checkMateCallback()
+    protected void checkMateCallback()
     {
     	JOptionPane.showMessageDialog(
     		    this,
@@ -223,7 +190,7 @@ class Game extends JPanel implements Observer
     	ViewAPI.showMenu();
     }
     
-    private void checkCallback()
+    protected void checkCallback()
     {
     	JOptionPane.showMessageDialog(
     		    this,
@@ -233,7 +200,7 @@ class Game extends JPanel implements Observer
     		);
     }
     
-    private void staleMateCallback()
+    protected void staleMateCallback()
     {
     	JOptionPane.showMessageDialog(
     		    this,
@@ -245,7 +212,7 @@ class Game extends JPanel implements Observer
     	ViewAPI.showMenu();
     }
     
-    private void pawnPromotionCallback()
+    protected void pawnPromotionCallback()
     {
     	JPopupMenu pawnPromotionMenu = new JPopupMenu();
     	

@@ -5,15 +5,59 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
-import controller.Main;
+import controller.Event;
+import model.Observer;
 
-public class ViewAPI 
+public class ViewAPI implements Observer
 {
+	private static ViewAPI instance;
+	
 	static WindowFrame window_frame;
 	static Menu menu_panel;
 	static Game game_panel;
 	
 	public ViewAPI() {}
+	
+	// Observer
+
+	public static ViewAPI getInstance()
+	{
+		if (instance == null)
+			instance = new ViewAPI();
+		
+		return instance;
+	}
+	
+	@Override
+	public void update(Event event)
+	{		
+		game_panel.repaint();
+				
+		String event_name = Event.getEvent(event);
+		
+		switch (event_name)
+		{
+		case "PIECE_MOVEMENT":
+			break;
+		case "CHECK":
+			game_panel.checkCallback();
+			break;
+		case "CHECKMATE":
+			game_panel.checkMateCallback();
+			break;
+		case "STALEMATE":
+			game_panel.staleMateCallback();
+			break;
+		case "PAWN_PROMOTION":
+			game_panel.pawnPromotionCallback();
+			break;	
+		case "PAWN_PROMOTED":
+			break;
+		case "CASTLE":
+			break;
+		}
+		
+	}
 
 	public static void openWindow()
 	{ 

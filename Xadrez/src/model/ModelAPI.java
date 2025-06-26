@@ -31,7 +31,7 @@ public class ModelAPI
         }
     }
     
-    public static void registerObserver() { addObserver( ViewAPI.getObserver()); } 
+    public static void registerObserver() { addObserver( ViewAPI.getInstance() ); } 
 	
 	// Métodos get()
 	
