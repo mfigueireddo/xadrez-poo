@@ -13,7 +13,7 @@ abstract class Piece
         this.symbol = '-'; 
     }
     
-    public static Piece createPiece(char color, char symbol) 
+    protected static Piece createPiece(char color, char symbol) 
     {
         switch (symbol)
         {

@@ -16,7 +16,7 @@ public class ViewAPI implements Observer
 	static Menu menu_panel;
 	static Game game_panel;
 	
-	public ViewAPI() {}
+	private ViewAPI() {}
 	
 	// Observer
 

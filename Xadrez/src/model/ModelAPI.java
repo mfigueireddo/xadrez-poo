@@ -13,7 +13,7 @@ public class ModelAPI
 	
 	private static List<Observer> observers = new ArrayList<>();
 	
-	public ModelAPI() { }
+	private ModelAPI() { }
 	
 	public static void newGame() { board = new Board(); }
 	

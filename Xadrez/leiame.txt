@@ -4,4 +4,5 @@ Raphael Terencio - 2111533
 
 main: src/controller/Main.java
 
-OBS: o movimento normal de uma peça pinta as casas de azul, já o movimento de roque pinta a casa destino de vermelho
+OBS1: durante a primeira parte do vídeo (testes + model) as câmeras ficaram desligadas por erro de configuração! Na segunda parte as câmeras estão aparecendo.
+OBS2: o movimento normal de uma peça pinta as casas de azul, já o movimento de roque pinta a casa destino de vermelho
