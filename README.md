@@ -23,7 +23,8 @@ Xadrez/
 ├── src/         → Código-fonte principal
 │   ├── model/      → Lógica de regras e estado do jogo
 │   ├── view/       → Interface gráfica do usuário
-│   └── controller/ → Coordena interação entre view e model
+│   ├── controller/ → Coordena interação entre view e model
+│   └── imagens/    → Recursos gráficos utilizados no jogo
 ├── tests/       → Testes automatizados com JUnit
 ```
 
@@ -44,6 +45,10 @@ Responsável pela **interface gráfica**:
 Faz a **mediação entre a interface e a lógica**:
 - Gerencia eventos de clique
 - Envia comandos para o modelo e atualiza a visualização
+- Contém um `enum` usado para organizar os tipos de **notificações** enviadas pelo padrão Observer
+
+### 🖼️ `src/imagens/`
+Armazena os **recursos visuais** usados na interface do jogo, como ícones e sprites das peças.
 
 ---
 
@@ -77,6 +82,7 @@ Faz a **mediação entre a interface e a lógica**:
 
 - **Observer**  
   Implementado em `model/ModelAPI.java`, que envia notificações para `view/Game.java` quando o estado do jogo muda.
+  Os tipos de notificação são organizados em um `enum` localizado em `controller/`.
 
 ---
 
